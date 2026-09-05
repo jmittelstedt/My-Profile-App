@@ -1,0 +1,11 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Flutter (Subdirectory)",
+      "request": "launch",
+      "type": "dart",
+      "cwd": "${workspaceFolder}/code"
+    }
+  ]
+}
