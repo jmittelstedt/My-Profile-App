@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'hobbies.dart';
+import 'pictures.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -57,6 +60,27 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  int _selectedIndex = 0;
+
+  final List<Widget> _pages = [
+    const Center(child: Text('Home Screen', style: TextStyle(fontSize: 24))),
+    const Center(child: Text('Profile Screen', style: TextStyle(fontSize: 24))),
+    const Center(
+      child: Text('Settings Screen', style: TextStyle(fontSize: 24)),
+    ),
+  ];
+
+  final List<String> _titles = ['Home', 'Profile', 'Settings'];
+
+  void _onSelectItem(int index) {
+    setState(() {
+      _selectedIndex = index; // Update index to trigger UI rebuild
+    });
+    Navigator.pop(
+      context,
+    ); // Automatically closes the drawer menu after tapping
+  }
+
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -71,42 +95,81 @@ class _MyHomePageState extends State<MyHomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
         centerTitle: true,
-        title: Text(widget.title),
+        title: Text(_titles[_selectedIndex]),
       ),
+
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            const DrawerHeader(
+              decoration: BoxDecoration(color: Colors.blue),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Navigation Menu',
+                    style: TextStyle(color: Colors.white, fontSize: 30),
+                  ),
+                ],
+              ),
+            ),
+
+            ListTile(
+              leading: const Icon(Icons.palette),
+              title: const Text('My Hobbies'),
+              selected: _selectedIndex == 0,
+              onTap: () {
+                setState(() {
+                  _selectedIndex = 0;
+                });
+
+                Navigator.pop(context);
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const HobbiesPage()),
+                );
+              },
+            ),
+
+            ListTile(
+              leading: const Icon(Icons.collections),
+              title: const Text('Favorite Pics'),
+              selected: _selectedIndex == 1,
+              onTap: () {
+                setState(() {
+                  _selectedIndex = 1;
+                });
+
+                Navigator.pop(context);
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const PicturesPage()),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+
+      // Your existing profile page stays here
       body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
         child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: .center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(height: 2),
 
             SizedBox(
               height: rowHeight + 10,
-              child: Icon(
+              child: const Icon(
                 Icons.account_circle,
-                size: 100.0, // Adjust size as needed
-                color: Colors.blue, // Matches the color from your image
+                size: 100.0,
+                color: Colors.blue,
               ),
             ),
 
@@ -122,9 +185,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(
-                    height: 8.0,
-                  ), // Optional: adds space between the lines
+                  SizedBox(height: 8.0),
                   Text(
                     'Flutter Beginner & App Creator',
                     style: TextStyle(fontSize: 14.0),
@@ -151,6 +212,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ],
                     ),
                   ),
+
                   SizedBox(
                     width: colWidth,
                     child: const Row(
@@ -172,21 +234,32 @@ class _MyHomePageState extends State<MyHomePage> {
             SizedBox(
               height: rowHeight,
               child: Column(
-                mainAxisAlignment:
-                    MainAxisAlignment.center, // Centers buttons horizontally
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ElevatedButton(
                     onPressed: () {
-                      // Action for Button 1
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const HobbiesPage(),
+                        ),
+                      );
                     },
-                    child: const Text('Follow me please'),
+                    child: const Text('My hobbies'),
                   ),
-                  const SizedBox(height: 8.0), // Spacing between buttons
+
+                  const SizedBox(height: 8.0),
+
                   ElevatedButton(
                     onPressed: () {
-                      // Action for Button 2
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const PicturesPage(),
+                        ),
+                      );
                     },
-                    child: const Text('Send me a message'),
+                    child: const Text('My favorite pics'),
                   ),
                 ],
               ),
